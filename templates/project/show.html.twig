@@ -1,0 +1,146 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ project.title }}
+	- Help Me Community
+{% endblock %}
+
+{% block body %}
+	<!-- Project Hero -->
+	{% set heroImage = 'https://cdn.pixabay.com/photo/2024/06/30/23/36/altruism-8864085_1280.jpg' %}
+	{% if 'puits' in project.title|lower %}
+		{% set heroImage = asset('img/well-construction.jpg') %}
+	{% elseif 'alimentaire' in project.title|lower %}
+		{% set heroImage = asset('img/food-aid.jpg') %}
+	{% elseif 'vêtement' in project.title|lower or 'vetement' in project.title|lower %}
+		{% set heroImage = asset('img/clothing-aid.jpg') %}
+	{% elseif project.image %}
+		{% set heroImage = project.image %}
+	{% endif %}
+	<section class="hero-section" style="background-image: url('{{ heroImage }}'); height: 60vh; min-height: 400px;">
+		<div class="hero-overlay"></div>
+		<div class="container">
+			<div class="hero-content text-center mx-auto">
+				<h1 class="hero-title text-white mb-4">{{ project.title }}</h1>
+				<nav aria-label="breadcrumb">
+					<ol class="breadcrumb justify-content-center">
+						<li class="breadcrumb-item">
+							<a href="{{ path('home') }}" class="text-white-50 text-decoration-none">Accueil</a>
+						</li>
+						<li class="breadcrumb-item active text-white" aria-current="page">Nos Projets</li>
+					</ol>
+				</nav>
+			</div>
+		</div>
+	</section><!-- Project Details --><section class="py-5">
+		<div class="container my-5">
+			<div class="row g-5 align-items-center">
+				<div class="col-lg-10 mx-auto">
+					<div class="text-center">
+						<div class="mb-3">
+							<span class="badge bg-primary-subtle text-primary rounded-pill px-3 py-2">Projet Humanitaire</span>
+						</div>
+						<h2 class="fw-bold mb-4 text-dark">À propos du projet</h2>
+						<div class="project-description text-muted lead mb-4 text-start">
+							{{ project.description|nl2br }}
+						</div>
+						<div class="d-flex gap-3 justify-content-center">
+							<a href="{{ path('donation') }}" class="btn btn-primary-custom btn-lg rounded-pill px-4">
+								Faire un don
+							</a>
+							<a href="{{ path('home') }}#projects" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+								Autres projets
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section><!-- Map Section -->{% if project.data is not empty %}
+		<section class="py-5 bg-light">
+			<div class="container">
+				<div class="section-title text-center mb-5">
+					<h2>Impact Global</h2>
+					<p>Nos actions concrètes pour
+						{{ project.title }}
+						à travers le monde.</p>
+				</div>
+				<div id="map" style="height: 500px;" class="rounded-4 shadow"></div>
+			</div>
+		</section>
+
+		<!-- Leaflet CSS -->
+		<link
+		rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+		<!-- Leaflet JS -->
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+		<script>
+			(function () {
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', initMap);
+} else {
+initMap();
+}
+
+function initMap() {
+if (typeof L === 'undefined') {
+console.error('Leaflet non chargé');
+return;
+}
+
+const mapElement = document.getElementById('map');
+if (! mapElement) 
+return;
+
+
+
+const map = L.map('map').setView([
+20, 0
+], 2);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© OpenStreetMap',
+maxZoom: 18
+}).addTo(map);
+
+const data = {{ project.data|json_encode|raw }};
+if (! data || data.length === 0) 
+return;
+
+
+
+const markers = [];
+
+data.forEach(function (item) {
+if (! item.lat || ! item.lng) 
+return;
+
+
+
+const radius = Math.max(8, Math.min(20, 8 + (item.count / 100)));
+
+const marker = L.circleMarker([
+item.lat, item.lng
+], {
+radius: radius,
+color: '#0d6efd',
+fillColor: '#198754',
+fillOpacity: 0.7,
+weight: 2
+}).addTo(map);
+
+marker.bindPopup('<div style="min-width: 160px;">' + '<h6 class="fw-bold text-primary mb-2">' + item.country + '</h6>' + '<div class="mb-1"><strong>Puits construits :</strong> ' + item.count + '</div>' + '<div><strong>Coût moyen :</strong> ' + item.price + '€</div>' + '</div>');
+
+markers.push(marker);
+});
+
+if (markers.length > 0) {
+const group = L.featureGroup(markers);
+map.fitBounds(group.getBounds().pad(0.1));
+}
+}
+})();
+		</script>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% for project in projects %}
+    <li>
+        <a class="dropdown-item" href="{{ path('project_show', {'slug': project.slug}) }}">
+            {{ project.title }}
+        </a>
+    </li>
+{% else %}
+    <li><span class="dropdown-item text-muted">Aucun projet</span></li>
+{% endfor %}

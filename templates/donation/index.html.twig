@@ -1,0 +1,338 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="donation-page">
+    <div class="container py-5">
+        <!-- En-tête -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold mb-3">Soutenez notre cause</h1>
+            <p class="lead text-muted">Votre générosité fait la différence. Choisissez le montant de votre don.</p>
+        </div>
+
+        {{ form_start(form, {'attr': {'id': 'donation-form'}}) }}
+
+        <!-- Type de don -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Type de don</h5>
+                        <div class="row g-3">
+                            {% for child in form.type %}
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        {{ form_widget(child, {'attr': {'class': 'btn-check'}}) }}
+                                        {{ form_label(child, null, {'label_attr': {'class': 'btn btn-outline-primary w-100 py-3'}}) }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {{ form_errors(form.type) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Montants prédéfinis avec cards -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-10">
+                <h5 class="text-center mb-4">Choisissez votre montant</h5>
+                <div class="row g-4">
+                    <!-- Card 30€ -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="donation-card" data-amount="30">
+                            <div class="card h-100 border-2 shadow-sm hover-lift">
+                                <div class="card-body text-center p-4">
+                                    <div class="amount-badge mb-3">30€</div>
+                                    <h6 class="card-title mb-3">Petit coup de pouce</h6>
+                                    <p class="card-text text-muted small">Aide ponctuelle pour notre mission</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 50€ -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="donation-card" data-amount="50">
+                            <div class="card h-100 border-2 shadow-sm hover-lift">
+                                <div class="card-body text-center p-4">
+                                    <div class="amount-badge mb-3">50€</div>
+                                    <h6 class="card-title mb-3">Soutien régulier</h6>
+                                    <p class="card-text text-muted small">Un geste significatif pour continuer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 100€ - Populaire -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="donation-card" data-amount="100">
+                            <div class="card h-100 border-primary border-3 shadow hover-lift position-relative">
+                                <span class="badge bg-primary position-absolute top-0 start-50 translate-middle">Populaire</span>
+                                <div class="card-body text-center p-4">
+                                    <div class="amount-badge amount-badge-primary mb-3">100€</div>
+                                    <h6 class="card-title mb-3">Grand soutien</h6>
+                                    <p class="card-text text-muted small">Un impact réel et durable</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 200€ -->
+                    <div class="col-md-3 col-sm-6">
+                        <div class="donation-card" data-amount="200">
+                            <div class="card h-100 border-2 shadow-sm hover-lift">
+                                <div class="card-body text-center p-4">
+                                    <div class="amount-badge mb-3">200€</div>
+                                    <h6 class="card-title mb-3">Mécène généreux</h6>
+                                    <p class="card-text text-muted small">Une contribution exceptionnelle</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Montant personnalisé -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        {{ form_label(form.amount, 'Ou saisissez un montant libre', {'label_attr': {'class': 'form-label fw-semibold mb-3'}}) }}
+                        <div class="input-group input-group-lg">
+                            {{ form_widget(form.amount, {'attr': {'class': 'form-control', 'placeholder': 'Montant de votre choix'}}) }}
+                            <span class="input-group-text bg-light">€</span>
+                        </div>
+                        {{ form_errors(form.amount) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informations du donateur -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">
+                            <i class="bi bi-person-circle me-2"></i>Vos coordonnées
+                        </h5>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="{{ form.firstName.vars.id }}" class="form-label">Prénom <span class="text-danger">*</span></label>
+                                {{ form_widget(form.firstName, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Votre prénom'}}) }}
+                                {{ form_errors(form.firstName) }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.lastName.vars.id }}" class="form-label">Nom <span class="text-danger">*</span></label>
+                                {{ form_widget(form.lastName, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Votre nom'}}) }}
+                                {{ form_errors(form.lastName) }}
+                            </div>
+                            <div class="col-12">
+                                <label for="{{ form.email.vars.id }}" class="form-label">Email <span class="text-danger">*</span></label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-light">
+                                        <i class="bi bi-envelope"></i>
+                                    </span>
+                                    {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'votre@email.com'}}) }}
+                                </div>
+                                {{ form_errors(form.email) }}
+                            </div>
+                            <div class="col-12">
+                                <label for="{{ form.address.vars.id }}" class="form-label">Adresse</label>
+                                {{ form_widget(form.address, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Numéro et rue'}}) }}
+                                {{ form_errors(form.address) }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.city.vars.id }}" class="form-label">Ville</label>
+                                {{ form_widget(form.city, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Votre ville'}}) }}
+                                {{ form_errors(form.city) }}
+                            </div>
+                            <div class="col-md-3">
+                                <label for="{{ form.zip.vars.id }}" class="form-label">Code postal</label>
+                                {{ form_widget(form.zip, {'attr': {'class': 'form-control form-control-lg', 'placeholder': '75000'}}) }}
+                                {{ form_errors(form.zip) }}
+                            </div>
+                            <div class="col-md-3">
+                                <label for="{{ form.country.vars.id }}" class="form-label">Pays</label>
+                                {{ form_widget(form.country, {'attr': {'class': 'form-select form-select-lg'}}) }}
+                                {{ form_errors(form.country) }}
+                            </div>
+                        </div>
+                        <div class="mt-3 text-muted small">
+                            <i class="bi bi-info-circle me-1"></i>
+                            Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bouton de validation -->
+        <div class="text-center mb-4">
+            <button type="button" id="checkout-button" class="btn btn-success btn-lg px-5 py-3 shadow">
+                <i class="bi bi-lock-fill me-2"></i>Finaliser mon don
+            </button>
+            <div class="mt-3 text-muted">
+                <small><i class="bi bi-shield-check me-1"></i>Paiement 100% sécurisé via Stripe • Reçu fiscal envoyé par email</small>
+            </div>
+        </div>
+
+        {{ form_end(form, {'render_rest': false}) }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stripePublicKey = '{{ stripePublicKey }}';
+    if (!stripePublicKey) {
+        console.error('Stripe Public Key manquante !');
+        return;
+    }
+    const stripe = Stripe(stripePublicKey);
+    const button = document.getElementById('checkout-button');
+    const amountInput = document.querySelector('input[name="donation[amount]"]');
+
+    // Gestion des cards de montant
+    const cards = document.querySelectorAll('.donation-card');
+    cards.forEach(function(card) {
+        card.addEventListener('click', function() {
+            // Retire l'active de toutes les cards
+            cards.forEach(function(c) {
+                c.classList.remove('active');
+            });
+            // Ajoute active à la card cliquée
+            this.classList.add('active');
+            // Met à jour le montant
+            if (amountInput) {
+                amountInput.value = this.getAttribute('data-amount');
+                // On ne dispatch PAS l'événement input ici pour éviter de désactiver la card immédiatement
+                // Le listener 'input' ci-dessous gère la cohérence visuelle
+            }
+        });
+    });
+
+    // Si l'utilisateur tape un montant personnalisé, on met à jour les cards
+    if (amountInput) {
+        amountInput.addEventListener('input', function() {
+            const val = this.value;
+            let match = false;
+            cards.forEach(function(c) {
+                if (c.getAttribute('data-amount') === val) {
+                    c.classList.add('active');
+                    match = true;
+                } else {
+                    c.classList.remove('active');
+                }
+            });
+        });
+    }
+
+    if (button) {
+        button.addEventListener('click', function() {
+            console.log('Bouton cliqué - Début de la validation');
+            
+            const form = document.getElementById('donation-form');
+            if (!form) {
+                console.error('Formulaire non trouvé !');
+                alert('Erreur : formulaire introuvable');
+                return;
+            }
+
+            // Récupération des valeurs
+            const typeChecked = form.querySelector('input[name="donation[type]"]:checked');
+            const type = typeChecked ? typeChecked.value : null;
+            const amount = amountInput ? amountInput.value : null;
+            const firstName = form.querySelector('input[name="donation[firstName]"]') ? form.querySelector('input[name="donation[firstName]"]').value : null;
+            const lastName = form.querySelector('input[name="donation[lastName]"]') ? form.querySelector('input[name="donation[lastName]"]').value : null;
+            const email = form.querySelector('input[name="donation[email]"]') ? form.querySelector('input[name="donation[email]"]').value : null;
+
+            console.log('Données récupérées:', {type, amount, firstName, lastName, email});
+
+            // Validation
+            if (!type) {
+                alert('Veuillez sélectionner un type de don.');
+                return;
+            }
+            if (!amount || parseFloat(amount) <= 0) {
+                alert('Veuillez saisir un montant valide.');
+                return;
+            }
+            if (!firstName || !lastName || !email) {
+                alert('Veuillez remplir tous les champs obligatoires (prénom, nom, email).');
+                return;
+            }
+
+            // Validation de l'email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Veuillez saisir une adresse email valide.');
+                return;
+            }
+
+            // Désactive le bouton et affiche un spinner
+            button.disabled = true;
+            button.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Redirection vers Stripe... <span class="spinner-border spinner-border-sm"></span>';
+
+            const requestData = {
+                type: type,
+                amount: amount,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                address: form.querySelector('input[name="donation[address]"]') ? form.querySelector('input[name="donation[address]"]').value : '',
+                city: form.querySelector('input[name="donation[city]"]') ? form.querySelector('input[name="donation[city]"]').value : '',
+                zip: form.querySelector('input[name="donation[zip]"]') ? form.querySelector('input[name="donation[zip]"]').value : '',
+                country: form.querySelector('select[name="donation[country]"]') ? form.querySelector('select[name="donation[country]"]').value : '',
+            };
+
+            console.log('Données envoyées:', requestData);
+            console.log('URL appelée:', '{{ path("create_checkout_session") }}');
+
+            fetch('{{ path("create_checkout_session") }}', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams(requestData)
+            })
+            .then(function(res) {
+                console.log('Réponse reçue, statut:', res.status);
+                if (!res.ok) {
+                    throw new Error('Erreur HTTP: ' + res.status);
+                }
+                return res.json();
+            })
+            .then(function(data) {
+                console.log('Données JSON reçues:', data);
+                if(data.id) {
+                    console.log('Redirection vers Stripe avec session ID:', data.id);
+                    return stripe.redirectToCheckout({ sessionId: data.id });
+                } else if(data.error) {
+                    throw new Error(data.error);
+                } else {
+                    throw new Error('Aucun ID de session reçu');
+                }
+            })
+            .then(function(result) {
+                if (result && result.error) {
+                    console.error('Erreur Stripe:', result.error);
+                    alert('Erreur Stripe: ' + result.error.message);
+                    button.disabled = false;
+                    button.innerHTML = '<i class="bi bi-lock-fill me-2"></i>Finaliser mon don';
+                }
+            })
+            .catch(function(err) {
+                console.error('Erreur complète:', err);
+                alert('Erreur: ' + err.message);
+                button.disabled = false;
+                button.innerHTML = '<i class="bi bi-lock-fill me-2"></i>Finaliser mon don';
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

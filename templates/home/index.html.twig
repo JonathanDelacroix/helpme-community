@@ -1,0 +1,326 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<!-- Hero Section -->
+	<section class="hero-section" style="background-image: url('{{ asset('img/hero-water.jpg') }}');">
+		<div class="hero-overlay"></div>
+		<div class="container">
+			<div class="hero-content">
+				<h1 class="hero-title">L'eau, la nourriture,
+					<span>l'espoir</span>
+				</h1>
+				<p class="hero-text">Ensemble, nous construisons des puits, distribuons de la nourriture et offrons des vêtements aux communautés dans le besoin.</p>
+				<div class="d-flex flex-wrap">
+					<a href="{{ path('donation') }}" class="btn btn-primary-custom btn-hero">Faire un Don</a>
+					<a href="#projects" class="btn btn-outline-custom btn-hero">Découvrir</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Projects Section -->
+	<section id="projects" class="py-5">
+		<div class="container my-5">
+			<div class="section-title">
+				<h2>Nos Projets</h2>
+				<p>Trois piliers d'action pour un impact durable.</p>
+			</div>
+
+			<div class="row g-4">
+				{% for project in projects %}
+					<div class="col-md-4">
+						<a href="{{ path('project_show', {'slug': project.slug}) }}" class="text-decoration-none text-dark">
+							<div class="card project-card h-100">
+								<div class="position-relative">
+									{% set imageName = 'https://via.placeholder.com/400x300?text=Projet' %}
+									{% if 'puits' in project.title|lower %}
+										{% set imageName = asset('img/well-construction.jpg') %}
+									{% elseif 'alimentaire' in project.title|lower %}
+										{% set imageName = asset('img/food-aid.jpg') %}
+									{% elseif 'vêtement' in project.title|lower or 'vetement' in project.title|lower %}
+										{% set imageName = asset('img/clothing-aid.jpg') %}
+									{% elseif project.image %}
+										{% set imageName = project.image %}
+									{% endif %}
+
+									<img src="{{ imageName }}" class="card-img-top" alt="{{ project.title }}">
+									<div class="position-absolute top-0 end-0 m-3 bg-white rounded-circle p-2 shadow-sm">
+										<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right text-primary" viewbox="0 0 16 16">
+											<path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+										</svg>
+									</div>
+								</div>
+								<div class="card-body">
+									<h5 class="card-title">{{ project.title }}</h5>
+									<p class="card-text text-muted">
+										{{ project.description|length > 100 ? project.description[:100] ~ '…' : project.description }}
+									</p>
+								</div>
+							</div>
+						</a>
+					</div>
+				{% else %}
+					<div class="col-12 text-center">
+						<p>Aucun projet disponible pour le moment.</p>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+
+	<!-- Impact Section -->
+	<section class="impact-section">
+		<div class="container">
+			<div class="section-title text-white mb-5">
+				<h2 class="text-white">Notre Impact</h2>
+				<p class="text-white-50">Des chiffres qui témoignent de notre engagement.</p>
+			</div>
+			<div class="row text-center">
+				<div class="col-md-3 mb-4">
+					<div class="impact-number">1500+</div>
+					<div class="impact-label">Puits Construits</div>
+				</div>
+				<div class="col-md-3 mb-4">
+					<div class="impact-number">10k+</div>
+					<div class="impact-label">Personnes Aidées</div>
+				</div>
+				<div class="col-md-3 mb-4">
+					<div class="impact-number">5k+</div>
+					<div class="impact-label">Familles Nourries</div>
+				</div>
+				<div class="col-md-3 mb-4">
+					<div class="impact-number">2k+</div>
+					<div class="impact-label">Vêtements Distribués</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Donation Section -->
+	<section class="donation-section">
+		<div class="container">
+			<div class="donation-card text-center">
+				<div class="mt-4">
+					<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="#fd7e14" class="bi bi-heart-fill mb-3" viewbox="0 0 16 16">
+						<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+					</svg>
+					<h2 class="fw-bold">Soutenez Notre Mission</h2>
+					<p class="text-muted">Votre générosité transforme des vies. Chaque don compte.</p>
+				</div>
+
+				<div class="d-flex justify-content-center flex-wrap mb-4">
+					<button class="btn donation-amount-btn">50€</button>
+					<button class="btn donation-amount-btn active">100€</button>
+					<button class="btn donation-amount-btn">200€</button>
+				</div>
+
+				<a href="{{ path('donation') }}" class="btn btn-primary-custom btn-lg w-100 py-3 rounded-pill">Faire un Don Maintenant</a>
+				<p class="mt-3 small text-muted">Paiement sécurisé via Stripe. Déductible des impôts.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- About Section -->
+	<section class="py-5 bg-white">
+		<div class="container my-5">
+			<div class="section-title">
+				<h2>À Propos de Nous</h2>
+				<p>Grandir notre mission, avec transparence et efficacité pour les plus démunis.</p>
+			</div>
+			<div class="row g-4">
+				<div class="col-md-6">
+					<div class="d-flex p-4 border rounded-4 h-100 align-items-start">
+						<div class="flex-shrink-0 bg-light p-3 rounded-circle text-primary me-3">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bullseye" viewbox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+								<path d="M8 13A5 5 0 1 1 8 3a5 5 0 0 1 0 10zm0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
+								<path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+								<path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+							</svg>
+						</div>
+						<div>
+							<h5 class="fw-bold">Notre Mission</h5>
+							<p class="text-muted mb-0">Fournir l'accès à l'eau, à la nourriture et aux soins de base aux populations les plus vulnérables.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="d-flex p-4 border rounded-4 h-100 align-items-start">
+						<div class="flex-shrink-0 bg-light p-3 rounded-circle text-primary me-3">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-people-fill" viewbox="0 0 16 16">
+								<path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+								<path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
+								<path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+							</svg>
+						</div>
+						<div>
+							<h5 class="fw-bold">Notre Équipe</h5>
+							<p class="text-muted mb-0">Une équipe passionnée de bénévoles et d'experts engagés sur le terrain.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="d-flex p-4 border rounded-4 h-100 align-items-start">
+						<div class="flex-shrink-0 bg-light p-3 rounded-circle text-primary me-3">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-heart-fill" viewbox="0 0 16 16">
+								<path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+							</svg>
+						</div>
+						<div>
+							<h5 class="fw-bold">Nos Valeurs</h5>
+							<p class="text-muted mb-0">Transparence, dignité, et solidarité sont au cœur de chacune de nos actions.</p>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="d-flex p-4 border rounded-4 h-100 align-items-start">
+						<div class="flex-shrink-0 bg-light p-3 rounded-circle text-primary me-3">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-globe" viewbox="0 0 16 16">
+								<path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.592.325 1.132.554 1.587.553 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.23-.455.417-.995.554-1.587H8.5z"/>
+							</svg>
+						</div>
+						<div>
+							<h5 class="fw-bold">Notre Vision</h5>
+							<p class="text-muted mb-0">Un monde où chaque être humain a accès aux ressources vitales et peut vivre dignement.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Contact Section -->
+	<section class="py-5 bg-light">
+		<div class="container my-5 text-center">
+			<div class="section-title">
+				<h2>Contactez-Nous</h2>
+				<p>Une question ? Envie d'aider autrement ? N'hésitez pas à nous contacter.</p>
+			</div>
+			<div class="row justify-content-center g-4">
+				<div class="col-md-4">
+					<div class="bg-white p-4 rounded-4 shadow-sm h-100">
+						<div class="mb-3 text-primary">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-envelope" viewbox="0 0 16 16">
+								<path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+							</svg>
+						</div>
+						<h5 class="fw-bold">Email</h5>
+						<p class="text-muted">association.helpme@yahoo.com</p>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="bg-white p-4 rounded-4 shadow-sm h-100">
+						<div class="mb-3 text-primary">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-telephone" viewbox="0 0 16 16">
+								<path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.678.678 0 0 0 .178.643l2.457 2.457a.678.678 0 0 0 .644.178l2.189-.547a1.745 1.745 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.634 18.634 0 0 1-7.01-4.42 18.634 18.634 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877L1.885.511z"/>
+							</svg>
+						</div>
+						<h5 class="fw-bold">Téléphone</h5>
+						<p class="text-muted">+33 6 95 94 47 93</p>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="bg-white p-4 rounded-4 shadow-sm h-100">
+						<div class="mb-3 text-primary">
+							<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-geo-alt" viewbox="0 0 16 16">
+								<path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.493 31.493 0 0 1 8 14.58a31.481 31.481 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94zM8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10z"/>
+								<path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+							</svg>
+						</div>
+						<h5 class="fw-bold">Adresse</h5>
+						<p class="text-muted">9 Rue des Cordeliers, 95300 Pontoise, France</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Map Section (Kept but styled) -->
+	{% if allData is not empty %}
+		<section class="py-5">
+			<div class="container">
+				<div class="section-title">
+					<h2>Nos Actions dans le Monde</h2>
+				</div>
+				<div id="world-map" style="height: 500px;" class="rounded-4 shadow"></div>
+			</div>
+		</section>
+
+		<!-- Leaflet CSS -->
+		<link
+		rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+		<!-- Leaflet JS -->
+		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+		<script>
+			(function () {
+if (document.readyState === 'loading') {
+document.addEventListener('DOMContentLoaded', initMap);
+} else {
+initMap();
+}
+
+function initMap() {
+if (typeof L === 'undefined') {
+console.error('Leaflet non chargé');
+return;
+}
+
+const map = L.map('world-map').setView([
+20, 0
+], 2);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© OpenStreetMap',
+maxZoom: 18
+}).addTo(map);
+
+const data = {{ allData|json_encode|raw }};
+const markers = [];
+
+data.forEach(function (item) {
+if (! item.lat || ! item.lng) 
+return;
+
+
+
+const radius = Math.max(8, Math.min(20, 8 + (item.count / 100)));
+
+const marker = L.circleMarker([
+item.lat, item.lng
+], {
+radius: radius,
+color: '#0d6efd',
+fillColor: '#198754',
+fillOpacity: 0.7,
+weight: 2
+}).addTo(map);
+
+marker.bindPopup('<div style="min-width: 160px;">' + '<h6 class="fw-bold text-primary mb-2">' + item.country + '</h6>' + '<div class="mb-1"><strong>Puits construits :</strong> ' + item.count + '</div>' + '<div><strong>Coût moyen :</strong> ' + item.price + '€</div>' + '</div>');
+
+markers.push(marker);
+});
+
+if (markers.length > 0) {
+const group = L.featureGroup(markers);
+map.fitBounds(group.getBounds().pad(0.1));
+}
+}
+})();
+		</script>
+	{% endif %}
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+const buttons = document.querySelectorAll('.donation-amount-btn');
+buttons.forEach(button => {
+button.addEventListener('click', function () {
+buttons.forEach(btn => btn.classList.remove('active'));
+this.classList.add('active');
+});
+});
+});
+	</script>
+
+{% endblock %}

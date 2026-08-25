@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Action admin{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">{{ project.id ? 'Modifier une action' : 'Nouvelle action' }}</h1>
+        <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-secondary">Retour</a>
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {{ form_start(form) }}
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        {{ form_label(form.title) }}
+                        {{ form_widget(form.title) }}
+                        {{ form_errors(form.title) }}
+                    </div>
+                    <div class="col-md-4">
+                        {{ form_label(form.slug) }}
+                        {{ form_widget(form.slug) }}
+                        {{ form_errors(form.slug) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_label(form.image) }}
+                        {{ form_widget(form.image) }}
+                        {{ form_errors(form.image) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_label(form.description) }}
+                        {{ form_widget(form.description) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+                    <div class="col-12">
+                        {{ form_label(form.dataJson) }}
+                        {{ form_widget(form.dataJson) }}
+                        {{ form_errors(form.dataJson) }}
+                        <div class="form-text">
+                            <strong>Géocodage automatique :</strong> Renseignez simplement un objet ou un tableau d'objets avec le champ <code>"country": "NomDuPays"</code> (ex: <code>[{"country": "Maroc", "count": 40}]</code>). Les coordonnées GPS seront calculées automatiquement via l'API OpenStreetMap lors de l'enregistrement et affichées sur la carte.
+                        </div>
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-4">Enregistrer</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
