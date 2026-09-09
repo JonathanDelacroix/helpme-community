@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class DonationType extends AbstractType
 {
@@ -20,27 +21,28 @@ class DonationType extends AbstractType
             // Type de don
             ->add('type', ChoiceType::class, [
                 'choices' => [
-                    'Don pour puits' => 'puits',
-                    'Don alimentaire' => 'alimentaire',
+                    'Construction de puits' => 'puits',
+                    'Achat alimentaire' => 'alimentaire',
                 ],
                 'expanded' => true,
                 'multiple' => false,
                 'label' => 'Type de don',
                 'choice_attr' => function($choice, $key, $value) {
                     return ['class' => 'form-check-input'];
-                },
+                }
             ])
-            
+
             // Montant du don libre (on gérera les boutons prédéfinis en Twig/JS)
             ->add('amount', MoneyType::class, [
                 'currency' => false,
+                'scale' => 0,
                 'label' => 'Montant du don',
                 'attr' => [
                     'class' => 'form-control',
                     'placeholder' => 'Ex: 50'
                 ],
             ])
-            
+
             // Donateur - informations personnelles
             ->add('firstName', TextType::class, ['label' => 'Prénom'])
             ->add('lastName', TextType::class, ['label' => 'Nom'])
@@ -52,10 +54,18 @@ class DonationType extends AbstractType
                 'label' => 'Pays',
                 'preferred_choices' => ['FR'],
                 'attr' => ['class' => 'form-select']
-            ])
+            ]);
+
+            if ($options['show_save_info']) {
+                $builder->add('saveInfo', CheckboxType::class, [
+                    'label' => 'Sauvegarder mes informations pour la prochaine fois',
+                    'mapped' => false,
+                    'required' => false,
+                ]);
+            }
 
             // Bouton de soumission
-            ->add('submit', SubmitType::class, [
+            $builder->add('submit', SubmitType::class, [
                 'label' => 'Faire un don',
                 'attr' => ['class' => 'btn btn-success mt-3 btn-lg'],
             ]);
@@ -65,6 +75,7 @@ class DonationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Donation::class,
+            'show_save_info' => false,
         ]);
     }
 }

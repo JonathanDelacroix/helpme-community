@@ -9,6 +9,10 @@ use App\Entity\User;
 #[ORM\Entity(repositoryClass: DonationRepository::class)]
 class Donation
 {
+    public const STATUS_PENDING = 'pending';
+    public const STATUS_PAID = 'paid';
+    public const STATUS_CANCELLED = 'cancelled';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -43,6 +47,12 @@ class Donation
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $country = null;
+
+    #[ORM\Column(length: 20)]
+    private string $status = self::STATUS_PENDING;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeSessionId = null;
 
     // ----- Getters & Setters -----
 
@@ -158,6 +168,33 @@ class Donation
     public function setCountry(?string $country): static
     {
         $this->country = $country;
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->status === self::STATUS_PAID;
+    }
+
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
+
+    public function setStripeSessionId(?string $stripeSessionId): static
+    {
+        $this->stripeSessionId = $stripeSessionId;
         return $this;
     }
 }

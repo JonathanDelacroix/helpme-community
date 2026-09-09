@@ -30,16 +30,16 @@ class RegistrationFormType extends AbstractType
                     new NotBlank(['message' => 'Veuillez saisir un mot de passe.']),
                     new Length([
                         'min' => 6,
-                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caracteres.',
+                        'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères.',
                         'max' => 4096,
                     ]),
                 ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
-                'label' => 'J accepte la creation de mon compte donateur',
+                'label' => 'J\'accepte la création de mon compte donateur',
                 'constraints' => [
-                    new IsTrue(['message' => 'Vous devez accepter pour creer un compte.']),
+                    new IsTrue(['message' => 'Vous devez accepter pour créer un compte.']),
                 ],
             ]);
     }

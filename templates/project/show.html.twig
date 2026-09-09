@@ -8,12 +8,16 @@
 {% block body %}
 	<!-- Project Hero -->
 	{% set heroImage = 'https://cdn.pixabay.com/photo/2024/06/30/23/36/altruism-8864085_1280.jpg' %}
+	{% set dataLabel = 'Actions menées' %}
 	{% if 'puits' in project.title|lower %}
 		{% set heroImage = asset('img/well-construction.jpg') %}
-	{% elseif 'alimentaire' in project.title|lower %}
+		{% set dataLabel = 'Puits construits' %}
+	{% elseif 'alimentaire' in project.title|lower or 'nourriture' in project.title|lower %}
 		{% set heroImage = asset('img/food-aid.jpg') %}
+		{% set dataLabel = 'Repas distribués' %}
 	{% elseif 'vêtement' in project.title|lower or 'vetement' in project.title|lower %}
 		{% set heroImage = asset('img/clothing-aid.jpg') %}
+		{% set dataLabel = 'Vêtements distribués' %}
 	{% elseif project.image %}
 		{% set heroImage = project.image %}
 	{% endif %}
@@ -77,70 +81,70 @@
 
 		<script>
 			(function () {
-if (document.readyState === 'loading') {
-document.addEventListener('DOMContentLoaded', initMap);
-} else {
-initMap();
-}
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initMap);
+				} else {
+					initMap();
+				}
 
-function initMap() {
-if (typeof L === 'undefined') {
-console.error('Leaflet non chargé');
-return;
-}
+				function initMap() {
+				if (typeof L === 'undefined') {
+					console.error('Leaflet non chargé');
+					return;
+				}
 
-const mapElement = document.getElementById('map');
-if (! mapElement) 
-return;
+				const mapElement = document.getElementById('map');
+				if (! mapElement)
+				return;
 
+				const itemLabel = {{ dataLabel|json_encode|raw }};
 
+				const map = L.map('map').setView([
+					20, 0
+				], 2);
 
-const map = L.map('map').setView([
-20, 0
-], 2);
+				L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+					attribution: '© OpenStreetMap',
+					maxZoom: 18
+				}).addTo(map);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '© OpenStreetMap',
-maxZoom: 18
-}).addTo(map);
+				const data = {{ project.data|json_encode|raw }};
+				if (! data || data.length === 0)
+				return;
 
-const data = {{ project.data|json_encode|raw }};
-if (! data || data.length === 0) 
-return;
+				const markers = [];
 
+				data.forEach(function (item) {
+				if (! item.lat || ! item.lng)
+				return;
 
+				const radius = Math.max(8, Math.min(20, 8 + (item.count / 100)));
 
-const markers = [];
+				const marker = L.circleMarker([
+					item.lat, item.lng
+				], {
+					radius: radius,
+					color: '#0d6efd',
+					fillColor: '#198754',
+					fillOpacity: 0.7,
+					weight: 2
+				}).addTo(map);
 
-data.forEach(function (item) {
-if (! item.lat || ! item.lng) 
-return;
+				let popupHtml = '<div style="min-width: 160px;">' + '<h6 class="fw-bold text-primary mb-2">' + item.country + '</h6>' + '<div class="mb-1"><strong>' + itemLabel + ' :</strong> ' + item.count + '</div>';
+				if (item.price) {
+					popupHtml += '<div><strong>Coût moyen :</strong> ' + item.price + '€</div>';
+				}
+				popupHtml += '</div>';
+				marker.bindPopup(popupHtml);
+				markers.push(marker);
+				});
 
-
-
-const radius = Math.max(8, Math.min(20, 8 + (item.count / 100)));
-
-const marker = L.circleMarker([
-item.lat, item.lng
-], {
-radius: radius,
-color: '#0d6efd',
-fillColor: '#198754',
-fillOpacity: 0.7,
-weight: 2
-}).addTo(map);
-
-marker.bindPopup('<div style="min-width: 160px;">' + '<h6 class="fw-bold text-primary mb-2">' + item.country + '</h6>' + '<div class="mb-1"><strong>Puits construits :</strong> ' + item.count + '</div>' + '<div><strong>Coût moyen :</strong> ' + item.price + '€</div>' + '</div>');
-
-markers.push(marker);
-});
-
-if (markers.length > 0) {
-const group = L.featureGroup(markers);
-map.fitBounds(group.getBounds().pad(0.1));
-}
-}
-})();
+				if (markers.length > 0) {
+					const group = L.featureGroup(markers);
+					map.fitBounds(group.getBounds().pad(0.1), { maxZoom: 5 });
+				}
+				}
+			})();
 		</script>
 	{% endif %}
 {% endblock %}

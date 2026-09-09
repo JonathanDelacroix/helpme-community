@@ -34,13 +34,13 @@
                         {{ render(controller('App\\Controller\\ProjectController::nav')) }}
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#">Impact</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('home') }}#impact">Impact</a></li>
                 {% if app.user %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item"><a class="nav-link" href="{{ path('admin_dashboard') }}">Admin</a></li>
                     {% endif %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('donor_dashboard') }}">Mes dons</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Deconnexion</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Inscription</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
@@ -54,6 +54,16 @@
 </nav>
 
 <main>
+    {# <div class="container mt-3"> #}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    {# </div> #}
     {% block body %}{% endblock %}
 </main>
 
@@ -71,15 +81,15 @@
                 <h5>Navigation</h5>
                 <ul class="list-unstyled">
                     <li><a href="{{ path('home') }}">Accueil</a></li>
-                    <li><a href="#">Nos Projets</a></li>
-                    <li><a href="#">À Propos</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="{{ path('home') }}#projects">Nos Projets</a></li>
+                    <li><a href="{{ path('home') }}#about">À Propos</a></li>
+                    <li><a href="{{ path('home') }}#contact">Contact</a></li>
                 </ul>
             </div>
             <div class="col-md-2 mb-4">
                 <h5>Légal</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="{{ path('legal_notice') }}">Mentions légales</a></li>
                     <li><a href="#">Politique de confidentialité</a></li>
                 </ul>
             </div>

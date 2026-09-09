@@ -27,7 +27,11 @@ class AdminController extends AbstractController
             'projects' => $projectRepository->findBy([], ['id' => 'DESC']),
             'donations' => $donations,
             'users' => $userRepository->findBy([], ['id' => 'DESC']),
-            'totalDonations' => array_reduce($donations, static fn (float $total, $donation): float => $total + (float) $donation->getAmount(), 0.0),
+            'totalDonations' => array_reduce(
+                    array_filter($donations, static fn ($donation) => $donation->isPaid()),
+                    static fn (float $total, $donation): float => $total + (float) $donation->getAmount(),
+                    0.0
+                ),
         ]);
     }
 
@@ -37,13 +41,13 @@ class AdminController extends AbstractController
         $project = new Project();
         $project->setData([]);
 
-        return $this->handleProjectForm($request, $entityManager, $geocodingService, $project, 'Projet cree.');
+        return $this->handleProjectForm($request, $entityManager, $geocodingService, $project, 'Projet crée.');
     }
 
     #[Route('/projects/{id}/edit', name: 'admin_project_edit')]
     public function editProject(Project $project, Request $request, EntityManagerInterface $entityManager, GeocodingService $geocodingService): Response
     {
-        return $this->handleProjectForm($request, $entityManager, $geocodingService, $project, 'Projet modifie.');
+        return $this->handleProjectForm($request, $entityManager, $geocodingService, $project, 'Projet modifié.');
     }
 
     #[Route('/projects/{id}/delete', name: 'admin_project_delete', methods: ['POST'])]
@@ -52,7 +56,7 @@ class AdminController extends AbstractController
         if ($this->isCsrfTokenValid('delete_project_' . $project->getId(), (string) $request->request->get('_token'))) {
             $entityManager->remove($project);
             $entityManager->flush();
-            $this->addFlash('success', 'Projet supprime.');
+            $this->addFlash('success', 'Projet supprimé.');
         }
 
         return $this->redirectToRoute('admin_dashboard');
@@ -69,7 +73,7 @@ class AdminController extends AbstractController
             $decodedData = $dataJson === '' ? [] : json_decode($dataJson, true);
 
             if ($decodedData === null && json_last_error() !== JSON_ERROR_NONE) {
-                $this->addFlash('danger', 'Le JSON des donnees est invalide.');
+                $this->addFlash('danger', 'Le JSON des données est invalide.');
             } else {
                 if (is_array($decodedData)) {
                     foreach ($decodedData as &$item) {

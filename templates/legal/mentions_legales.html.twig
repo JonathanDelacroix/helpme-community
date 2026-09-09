@@ -1,0 +1,37 @@
+{# templates/legal/mentions_legales.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Mentions légales{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Mentions légales</h1>
+
+    <h2>Éditeur du site</h2>
+    <p>
+        [Nom de l'entreprise / Nom et prénom si personne physique]<br>
+        [Forme juridique] au capital de [montant] €<br>
+        Siège social : [adresse]<br>
+        SIRET : [numéro]<br>
+        RCS : [ville et numéro]<br>
+        Email : [contact@exemple.com]<br>
+        Téléphone : [numéro]
+    </p>
+
+    <h2>Directeur de la publication</h2>
+    <p>[Nom du responsable]</p>
+
+    <h2>Hébergeur</h2>
+    <p>
+        [Nom de l'hébergeur]<br>
+        [Adresse]<br>
+        [Téléphone]
+    </p>
+
+    <h2>Propriété intellectuelle</h2>
+    <p>L'ensemble du contenu de ce site (textes, images, vidéos, etc.) est protégé par le droit d'auteur...</p>
+
+    <h2>Données personnelles</h2>
+    <p>Voir notre <a href="{{ path('privacy_policy') }}">politique de confidentialité</a>.</p>
+</div>
+{% endblock %}

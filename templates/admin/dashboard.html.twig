@@ -12,12 +12,6 @@
         <a href="{{ path('admin_project_new') }}" class="btn btn-primary">Nouvelle action</a>
     </div>
 
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }}">{{ message }}</div>
-        {% endfor %}
-    {% endfor %}
-
     <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="card shadow-sm">
@@ -38,7 +32,7 @@
         <div class="col-md-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <div class="text-muted">Total collecte</div>
+                    <div class="text-muted">Total collecté</div>
                     <div class="display-6">{{ totalDonations|number_format(2, ',', ' ') }} EUR</div>
                 </div>
             </div>
@@ -54,7 +48,7 @@
                         <thead>
                             <tr>
                                 <th>Titre</th>
-                                <th>Slug</th>
+                                <th>Type</th>
                                 <th>Image</th>
                                 <th class="text-end">Actions</th>
                             </tr>
@@ -76,7 +70,7 @@
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="4" class="text-muted">Aucune action creee.</td>
+                                    <td colspan="4" class="text-muted">Aucune action créée.</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -87,18 +81,19 @@
     </section>
 
     <section class="mb-5">
-        <h2 class="h4 mb-3">Dons recus</h2>
+        <h2 class="h4 mb-3">Dons reçus</h2>
         <div class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table align-middle">
                         <thead>
                             <tr>
-                                <th>Reference</th>
+                                <th>Référence</th>
                                 <th>Donateur</th>
                                 <th>Email</th>
                                 <th>Type</th>
                                 <th>Montant</th>
+                                <th>Statut</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,10 +104,17 @@
                                     <td>{{ donation.email }}</td>
                                     <td>{{ donation.type }}</td>
                                     <td>{{ donation.amount|number_format(2, ',', ' ') }} EUR</td>
+                                    <td>
+                                        {% if donation.isPaid %}
+                                            <span class="badge bg-success">Payé</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="5" class="text-muted">Aucun don pour le moment.</td>
+                                    <td colspan="6" class="text-muted">Aucun don pour le moment.</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

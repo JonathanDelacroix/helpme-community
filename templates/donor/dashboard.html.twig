@@ -17,9 +17,10 @@
                 <table class="table align-middle">
                     <thead>
                         <tr>
-                            <th>Reference</th>
+                            <th>Référence</th>
                             <th>Type</th>
                             <th>Montant</th>
+                            <th>Statut</th>
                             <th>Email</th>
                         </tr>
                     </thead>
@@ -27,13 +28,20 @@
                         {% for donation in donations %}
                             <tr>
                                 <td>#{{ donation.id }}</td>
-                                <td>{{ donation.type|default('Non precise') }}</td>
+                                <td>{{ donation.type|default('Non precisé') }}</td>
                                 <td>{{ donation.amount|number_format(2, ',', ' ') }} EUR</td>
+                                <td>
+                                    {% if donation.isPaid %}
+                                        <span class="badge bg-success">Payé</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">En attente</span>
+                                    {% endif %}
+                                </td>
                                 <td>{{ donation.email|default(app.user.email) }}</td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="4" class="text-muted">Vous n'avez pas encore fait de don.</td>
+                                <td colspan="5" class="text-muted">Vous n'avez pas encore fait de don.</td>
                             </tr>
                         {% endfor %}
                     </tbody>

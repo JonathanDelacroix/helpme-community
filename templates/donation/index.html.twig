@@ -16,7 +16,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h5 class="card-title mb-4">Type de don</h5>
+                        <h5 class="card-title mb-4">Type de don <span class="text-danger">*</span></h5>
                         <div class="row g-3">
                             {% for child in form.type %}
                                 <div class="col-md-6">
@@ -40,7 +40,7 @@
                 <div class="row g-4">
                     <!-- Card 30€ -->
                     <div class="col-md-3 col-sm-6">
-                        <div class="donation-card" data-amount="30">
+                        <div class="donation-card h-100" data-amount="30">
                             <div class="card h-100 border-2 shadow-sm hover-lift">
                                 <div class="card-body text-center p-4">
                                     <div class="amount-badge mb-3">30€</div>
@@ -53,7 +53,7 @@
 
                     <!-- Card 50€ -->
                     <div class="col-md-3 col-sm-6">
-                        <div class="donation-card" data-amount="50">
+                        <div class="donation-card h-100" data-amount="50">
                             <div class="card h-100 border-2 shadow-sm hover-lift">
                                 <div class="card-body text-center p-4">
                                     <div class="amount-badge mb-3">50€</div>
@@ -66,8 +66,8 @@
 
                     <!-- Card 100€ - Populaire -->
                     <div class="col-md-3 col-sm-6">
-                        <div class="donation-card" data-amount="100">
-                            <div class="card h-100 border-primary border-3 shadow hover-lift position-relative">
+                        <div class="donation-card h-100 active" data-amount="100">
+                            <div class="card h-100 border-2 shadow-sm hover-lift">
                                 <span class="badge bg-primary position-absolute top-0 start-50 translate-middle">Populaire</span>
                                 <div class="card-body text-center p-4">
                                     <div class="amount-badge amount-badge-primary mb-3">100€</div>
@@ -80,7 +80,7 @@
 
                     <!-- Card 200€ -->
                     <div class="col-md-3 col-sm-6">
-                        <div class="donation-card" data-amount="200">
+                        <div class="donation-card h-100" data-amount="200">
                             <div class="card h-100 border-2 shadow-sm hover-lift">
                                 <div class="card-body text-center p-4">
                                     <div class="amount-badge mb-3">200€</div>
@@ -99,7 +99,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        {{ form_label(form.amount, 'Ou saisissez un montant libre', {'label_attr': {'class': 'form-label fw-semibold mb-3'}}) }}
+                        {{ form_label(form.amount, 'Ou saisissez un montant libre', {'label_attr': {'class': 'form-label fw-semibold mb-3'}}) }} <span class="text-danger">*</span>
                         <div class="input-group input-group-lg">
                             {{ form_widget(form.amount, {'attr': {'class': 'form-control', 'placeholder': 'Montant de votre choix'}}) }}
                             <span class="input-group-text bg-light">€</span>
@@ -160,6 +160,12 @@
                                 {{ form_errors(form.country) }}
                             </div>
                         </div>
+                        {% if form.saveInfo is defined %}
+                            <div class="col-12 form-check mt-3">
+                                {{ form_widget(form.saveInfo, {'attr': {'class': 'form-check-input'}}) }}
+                                {{ form_label(form.saveInfo, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                            </div>
+                        {% endif %}
                         <div class="mt-3 text-muted small">
                             <i class="bi bi-info-circle me-1"></i>
                             Les champs marqués d'un <span class="text-danger">*</span> sont obligatoires
@@ -186,7 +192,6 @@
 {% endblock %}
 
 {% block javascripts %}
-<script src="https://js.stripe.com/v3/"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const stripePublicKey = '{{ stripePublicKey }}';
@@ -217,20 +222,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Si l'utilisateur tape un montant personnalisé, on met à jour les cards
-    if (amountInput) {
-        amountInput.addEventListener('input', function() {
-            const val = this.value;
-            let match = false;
-            cards.forEach(function(c) {
-                if (c.getAttribute('data-amount') === val) {
-                    c.classList.add('active');
-                    match = true;
-                } else {
-                    c.classList.remove('active');
-                }
-            });
+    // Si l'utilisateur tape un montant personnalisé (ou si un montant est pré-rempli), on met à jour les cards
+    function syncActiveCard() {
+        const val = amountInput ? parseFloat(amountInput.value) : NaN;
+        let match = false;
+        cards.forEach(function(c) {
+            const cardAmount = parseFloat(c.getAttribute('data-amount'));
+            if (!isNaN(val) && cardAmount === val) {
+                c.classList.add('active');
+                match = true;
+            } else {
+                c.classList.remove('active');
+            }
         });
+        return match;
+    }
+
+    if (amountInput) {
+        amountInput.addEventListener('input', syncActiveCard);
+        syncActiveCard();
     }
 
     if (button) {
@@ -279,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
             button.disabled = true;
             button.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Redirection vers Stripe... <span class="spinner-border spinner-border-sm"></span>';
 
+            const saveInfoCheckbox = form.querySelector('input[name="donation[saveInfo]"]');
             const requestData = {
                 type: type,
                 amount: amount,
@@ -289,6 +300,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 city: form.querySelector('input[name="donation[city]"]') ? form.querySelector('input[name="donation[city]"]').value : '',
                 zip: form.querySelector('input[name="donation[zip]"]') ? form.querySelector('input[name="donation[zip]"]').value : '',
                 country: form.querySelector('select[name="donation[country]"]') ? form.querySelector('select[name="donation[country]"]').value : '',
+                saveInfo: saveInfoCheckbox ? (saveInfoCheckbox.checked ? '1' : '0') : '0',
             };
 
             console.log('Données envoyées:', requestData);

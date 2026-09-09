@@ -19,6 +19,9 @@ class HomeController extends AbstractController
         foreach ($projects as $project) {
             if (!empty($project->getData())) {
                 foreach ($project->getData() as $item) {
+                    // On garde une trace du projet d'origine pour pouvoir adapter
+                    // le libellé affiché dans la popup de la carte (puits, vêtements, etc.).
+                    $item['projectTitle'] = $project->getTitle();
                     $allData[] = $item;
                 }
             }
