@@ -16,7 +16,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd ~/domains/goldenrod-turtle-537442.hostingersite.com/helpme-community
+            cd ~/domains/helpme-community.fr/helpme-community
             git pull origin main
             composer install --no-dev --optimize-autoloader
             php bin/console doctrine:migrations:migrate --no-interaction || true
