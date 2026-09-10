@@ -1,0 +1,25 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ~/domains/goldenrod-turtle-537442.hostingersite.com/helpme-community
+            git pull origin main
+            composer install --no-dev --optimize-autoloader
+            php bin/console doctrine:migrations:migrate --no-interaction || true
+            rm -rf var/cache/prod
+            mkdir -p var/cache/prod
+            chmod -R 775 var/
