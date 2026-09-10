@@ -127,7 +127,7 @@ class DonationController extends AbstractController
             'customer_email' => $email, // facultatif, pré-remplit Stripe
             'client_reference_id' => (string) $donation->getId(),
             'success_url' => $successUrl,
-            'cancel_url'  => $this->generateUrl('donation_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL),
+            'cancel_url'  => $this->generateUrl('donation_cancel', [], UrlGeneratorInterface::ABSOLUTE_URL) . '?session_id={CHECKOUT_SESSION_ID}',
         ]);
 
         $donation->setStripeSessionId($session->id);
@@ -173,8 +173,19 @@ class DonationController extends AbstractController
     }
 
     #[Route('/donation-cancel', name: 'donation_cancel')]
-    public function cancel()
+    public function cancel(Request $request, EntityManagerInterface $em): Response
     {
+        $sessionId = $request->query->get('session_id');
+
+        if ($sessionId) {
+            $donation = $em->getRepository(Donation::class)->findOneBy(['stripeSessionId' => $sessionId]);
+
+            if ($donation && $donation->getStatus() === Donation::STATUS_PENDING) {
+                $donation->setStatus(Donation::STATUS_CANCELLED);
+                $em->flush();
+            }
+        }
+
         $this->addFlash('danger', 'Le paiement a été annulé.');
         return $this->redirectToRoute('donation');
     }
