@@ -52,6 +52,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $country = null;
 
+    #[ORM\Column]
+    private bool $isVerified = false;
+
     public function __construct()
     {
         $this->donations = new ArrayCollection();
@@ -205,6 +208,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCountry(?string $country): static
     {
         $this->country = $country;
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
         return $this;
     }
 
