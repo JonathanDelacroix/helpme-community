@@ -33,6 +33,8 @@
                                 <td>
                                     {% if donation.isPaid %}
                                         <span class="badge bg-success">Payé</span>
+                                    {% elseif donation.status == 'cancelled' %}
+                                        <span class="badge bg-danger">Annulé</span>
                                     {% else %}
                                         <span class="badge bg-warning text-dark">En attente</span>
                                     {% endif %}

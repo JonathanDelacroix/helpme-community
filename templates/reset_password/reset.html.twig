@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau mot de passe{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height:70vh;">
+    <div class="card p-4 shadow-sm" style="width:400px;">
+        <h3 class="text-center mb-4">Nouveau mot de passe</h3>
+
+        {{ form_start(resetForm) }}
+            {{ form_errors(resetForm.plainPassword) }}
+            <div class="mb-3">
+                {{ form_label(resetForm.plainPassword.first, 'Nouveau mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(resetForm.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(resetForm.plainPassword.first) }}
+            </div>
+            <div class="mb-3">
+                {{ form_label(resetForm.plainPassword.second, 'Confirmez le mot de passe', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(resetForm.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(resetForm.plainPassword.second) }}
+            </div>
+
+            <button class="btn btn-primary w-100" type="submit">Réinitialiser le mot de passe</button>
+        {{ form_end(resetForm) }}
+    </div>
+</div>
+{% endblock %}
