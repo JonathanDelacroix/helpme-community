@@ -27,10 +27,10 @@ class Donation
     #[ORM\ManyToOne]
     private ?User $donor = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(name: 'firstName',length: 255, nullable: true)]
     private ?string $firstName = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(name: 'lastName',length: 255, nullable: true)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]

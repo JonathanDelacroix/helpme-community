@@ -114,7 +114,6 @@ class DonationController extends AbstractController
             . '?session_id={CHECKOUT_SESSION_ID}';
 
         $session = Session::create([
-            'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
                     'currency' => 'eur',
@@ -124,6 +123,7 @@ class DonationController extends AbstractController
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
+	    'managed_payments' => ['enabled' => false],
             'customer_email' => $email, // facultatif, pré-remplit Stripe
             'client_reference_id' => (string) $donation->getId(),
             'success_url' => $successUrl,
