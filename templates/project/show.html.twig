@@ -25,13 +25,13 @@
 		<div class="hero-overlay"></div>
 		<div class="container">
 			<div class="hero-content text-center mx-auto">
-				<h1 class="hero-title text-white mb-4">{{ project.title }}</h1>
+				<h1 class="hero-title text-muted mb-4">{{ project.title }}</h1>
 				<nav aria-label="breadcrumb">
 					<ol class="breadcrumb justify-content-center">
 						<li class="breadcrumb-item">
-							<a href="{{ path('home') }}" class="text-white-50 text-decoration-none">Accueil</a>
+							<a href="{{ path('home') }}" class="text-dark text-decoration-none">Accueil</a>
 						</li>
-						<li class="breadcrumb-item active text-white" aria-current="page">Nos Projets</li>
+						<li class="breadcrumb-item active text-muted" aria-current="page">Nos Projets</li>
 					</ol>
 				</nav>
 			</div>
@@ -49,7 +49,7 @@
 							{{ project.description|nl2br }}
 						</div>
 						<div class="d-flex gap-3 justify-content-center">
-							<a href="{{ path('donation') }}" class="btn btn-primary-custom btn-lg rounded-pill px-4">
+							<a href="{{ path('donation', {'type': project.slug}) }}" class="btn btn-primary-custom btn-lg rounded-pill px-4">
 								Faire un don
 							</a>
 							<a href="{{ path('home') }}#projects" class="btn btn-outline-secondary btn-lg rounded-pill px-4">

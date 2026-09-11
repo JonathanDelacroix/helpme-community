@@ -237,3 +237,19 @@ body {
         margin-right: 0;
     }
 }
+
+/* DataTables - boutons d'export */
+.dt-export-btn {
+    background-color: #fff;
+    border: 1px solid var(--primary-color, #6c757d);
+    color: var(--primary-color, #6c757d);
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    margin-right: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.dt-export-btn:hover {
+    background-color: var(--primary-color, #6c757d);
+    color: #fff;
+}

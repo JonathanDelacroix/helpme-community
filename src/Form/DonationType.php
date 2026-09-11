@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Donation;
+use App\Repository\ProjectRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -15,15 +16,22 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class DonationType extends AbstractType
 {
+    public function __construct(private ProjectRepository $projectRepository)
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // Genere les choix a partir des projets existants (title => slug)
+        $projects = $this->projectRepository->findAll();
+        $choices = [];
+        foreach ($projects as $project) {
+            $choices[$project->getTitle()] = $project->getSlug();
+        }
+
         $builder
-            // Type de don
             ->add('type', ChoiceType::class, [
-                'choices' => [
-                    'Construction de puits' => 'puits',
-                    'Achat alimentaire' => 'alimentaire',
-                ],
+                'choices' => $choices,
                 'expanded' => true,
                 'multiple' => false,
                 'label' => 'Type de don',
@@ -32,7 +40,6 @@ class DonationType extends AbstractType
                 }
             ])
 
-            // Montant du don libre (on gérera les boutons prédéfinis en Twig/JS)
             ->add('amount', MoneyType::class, [
                 'currency' => false,
                 'scale' => 0,
@@ -43,7 +50,6 @@ class DonationType extends AbstractType
                 ],
             ])
 
-            // Donateur - informations personnelles
             ->add('firstName', TextType::class, ['label' => 'Prénom'])
             ->add('lastName', TextType::class, ['label' => 'Nom'])
             ->add('email', EmailType::class, ['label' => 'Email'])
@@ -64,7 +70,6 @@ class DonationType extends AbstractType
                 ]);
             }
 
-            // Bouton de soumission
             $builder->add('submit', SubmitType::class, [
                 'label' => 'Faire un don',
                 'attr' => ['class' => 'btn btn-success mt-3 btn-lg'],

@@ -31,7 +31,19 @@ class DonationController extends AbstractController
             $donation->setAmount(100); // montant par défaut = celui mis en avant ("Populaire")
         }
 
-        $donation->setType('puits'); 
+        // Si on arrive depuis la page d'un projet (?type=slug), on preselectionne
+        // ce projet precis. Sinon, on retombe sur le premier projet par defaut.
+        $typeParam = $request->query->get('type');
+        $projectRepo = $em->getRepository(\App\Entity\Project::class);
+
+        if ($typeParam && $projectRepo->findOneBy(['slug' => $typeParam])) {
+            $donation->setType($typeParam);
+        } else {
+            $firstProject = $projectRepo->findOneBy([], ['id' => 'ASC']);
+            if ($firstProject) {
+                $donation->setType($firstProject->getSlug());
+            }
+        }
 
         // Préremplissage des coordonnées déjà sauvegardées par l'utilisateur connecté
         if ($user instanceof User) {

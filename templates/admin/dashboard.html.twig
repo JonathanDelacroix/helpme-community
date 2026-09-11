@@ -85,10 +85,11 @@
         <div class="card shadow-sm">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table align-middle">
+                    <table class="table align-middle" id="donations-table">
                         <thead>
                             <tr>
                                 <th>Référence</th>
+                                <th>Date</th>
                                 <th>Donateur</th>
                                 <th>Email</th>
                                 <th>Type</th>
@@ -100,6 +101,7 @@
                             {% for donation in donations %}
                                 <tr>
                                     <td>#{{ donation.id }}</td>
+                                    <td>{{ donation.createdAt|date('d/m/Y à H:i') }}</td>
                                     <td>{{ donation.firstName }} {{ donation.lastName }}</td>
                                     <td>{{ donation.email }}</td>
                                     <td>{{ donation.type }}</td>
@@ -156,4 +158,32 @@
         </div>
     </section>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new DataTable('#donations-table', {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/fr-FR.json'
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    { extend: 'csvHtml5', text: 'Exporter en CSV', className: 'dt-export-btn' },
+                    { extend: 'excelHtml5', text: 'Exporter en Excel', className: 'dt-export-btn' }
+                ],
+                order: [[1, 'desc']],
+                pageLength: 25
+            });
+        });
+    </script>
 {% endblock %}
