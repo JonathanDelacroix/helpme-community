@@ -224,3 +224,16 @@ body {
     text-align: center;
     font-size: 0.9rem;
 }
+
+@media (max-width: 767px) {
+    .hero-content {
+        max-width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        text-align: center;
+    }
+
+    .btn-hero {
+        margin-right: 0;
+    }
+}
