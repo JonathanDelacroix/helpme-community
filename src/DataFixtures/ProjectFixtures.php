@@ -41,21 +41,14 @@ class ProjectFixtures extends Fixture
             [
                 'title' => 'Dons alimentaires',
                 'slug' => 'alimentaire',
-                'description' => 'Nos actions de dons alimentaires ont pour objectif de soutenir les familles et les personnes en difficulté en leur fournissant des aliments essentiels, sains et nutritifs.
-                    Nous sommes intervenus dans plusieurs régions et pays pour apporter un soutien concret là où les besoins étaient les plus urgents.
+                'description' => 'Nos distributions alimentaires à Calais visent à soutenir les migrants et réfugiés vivant dans des conditions extrêmement précaires aux abords de la ville. Nos bénévoles distribuent régulièrement des repas chauds et des produits de première nécessité aux personnes en transit, souvent démunies de tout après un parcours migratoire long et dangereux.
 
-                    France : À Paris, nous avons distribué des denrées alimentaires à des familles en grande précarité. À Calais, nous avons soutenu les migrants et réfugiés vivant dans des conditions difficiles, en leur fournissant des repas et des produits de première nécessité. Dans la région parisienne, nous avons travaillé avec plusieurs foyers sociaux pour garantir que les familles bénéficient régulièrement d’une aide alimentaire adaptée.
+                Ces populations sont particulièrement vulnérables : exposées aux intempéries et régulièrement déplacées par les autorités locales qui confisquent leurs affaires, elles dépendent largement du soutien associatif pour se nourrir au quotidien.
 
-                    Maroc : Dans certaines villes et villages, de nombreuses familles n’ont pas un accès suffisant à une alimentation équilibrée. Nous avons mis en place des distributions régulières pour aider les enfants et les personnes âgées.
-
-                    Sénégal : Dans les villages et zones rurales, nous avons apporté des denrées alimentaires aux familles les plus vulnérables, réduisant ainsi l’insécurité alimentaire et contribuant à une meilleure santé globale.
-
-                    Grâce à vos dons, nous pouvons continuer ces actions et répondre aux besoins essentiels des communautés, en garantissant que chacun puisse accéder à des repas nutritifs et suffisants. Chaque contribution permet de nourrir des familles et d’offrir un peu de réconfort et de sécurité alimentaire aux plus démunis.',
+                Grâce à vos dons, nous pouvons maintenir une présence régulière sur le terrain et garantir un accès à une alimentation basique à des dizaines de personnes chaque jour. Chaque contribution permet de financer l\'achat de denrées, le matériel de distribution et la logistique nécessaire pour intervenir dans la durée.',
                 'image' => 'https://plus.unsplash.com/premium_photo-1683141173692-aba4763bce41?q=80&w=1170',
                 'data' => [
-                    ['country' => 'Maroc', 'count' => 40, 'lat' => 31.7917, 'lng' => -7.0926],
-                    ['country' => 'Sénégal', 'count' => 20, 'lat' => 14.4974, 'lng' => -14.4524],
-                    ['country' => 'France', 'count' => 10000, 'lat' => 46.2276, 'lng' => 2.2137],
+                    ['country' => 'France', 'count' => 10000, 'lat' => 50.9513, 'lng' => 1.8587],
                 ]
             ],
             [
@@ -63,7 +56,7 @@ class ProjectFixtures extends Fixture
                 'slug' => 'vetements',
                 'description' => 'Nos actions de dons de vêtements visent à réchauffer le cœur et le quotidien des personnes en difficulté, qu’il s’agisse de catastrophes naturelles ou de précarité quotidienne.
 
-                Maroc : Après le séisme, nous sommes intervenus dans plusieurs régions touchées, en particulier Telouet, où nous continuons encore aujourd’hui à soutenir les habitants. Nous distribuons vêtements, couvertures et équipements nécessaires pour aider les familles à se reconstruire et affronter les conditions difficiles.
+                Maroc : Depuis le séisme survenue en 2023, nous sommes intervenus dans plusieurs régions touchées, en particulier Telouet, où nous continuons encore aujourd’hui à soutenir les habitants. Nous distribuons vêtements, couvertures et équipements nécessaires pour aider les familles à se reconstruire et affronter les conditions difficiles.
 
                 France – Calais : Dans cette zone où vivent de nombreux migrants, nos distributions de vêtements sont essentielles pour protéger ces personnes vulnérables contre le froid et les intempéries. Malheureusement, ces populations sont régulièrement ciblées par les autorités locales, qui confisquent souvent leurs affaires, ce qui rend notre soutien encore plus crucial et urgent.
 
@@ -73,7 +66,7 @@ class ProjectFixtures extends Fixture
                 'image' => 'https://images.unsplash.com/photo-1743800531573-2b1c442d3885?q=80&w=1170',
                 'data' => [
                     ['country' => 'Maroc', 'count' => 4000, 'lat' => 31.7917, 'lng' => -7.0926],
-                    ['country' => 'France', 'count' => 10000, 'lat' => 46.2276, 'lng' => 2.2137],
+                    ['country' => 'France', 'count' => 10000, 'lat' => 50.9513, 'lng' => 1.8587],
                 ]
             ],
         ];
