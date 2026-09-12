@@ -36,4 +36,13 @@ class GeocodingServiceTest extends TestCase
 
         $this->assertNull($service->getCoordinatesForCountry(''));
     }
+
+    public function testGetCoordinatesForCountryReturnsNullWhenNoResults(): void
+    {
+        $httpClient = new MockHttpClient(new MockResponse('[]', ['http_code' => 200]));
+        $service = new GeocodingService($httpClient);
+
+        $this->assertNull($service->getCoordinatesForCountry('PaysInexistantXYZ'));
+    }
+
 }

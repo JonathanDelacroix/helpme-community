@@ -16,9 +16,15 @@ class ApiTokenAccessTokenHandler implements AccessTokenHandlerInterface
 
     public function getUserBadgeFrom(#[\SensitiveParameter] string $accessToken): UserBadge
     {
-        $user = $this->userRepository->findOneBy(['apiToken' => $accessToken]);
+        $hashedToken = hash('sha256', $accessToken);
+
+        $user = $this->userRepository->findOneBy(['apiToken' => $hashedToken]);
 
         if (null === $user) {
+            throw new BadCredentialsException('Invalid or expired API token.');
+        }
+
+        if (null === $user->getApiTokenExpiresAt() || $user->getApiTokenExpiresAt() < new \DateTimeImmutable()) {
             throw new BadCredentialsException('Invalid or expired API token.');
         }
 

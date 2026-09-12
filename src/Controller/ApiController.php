@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 #[Route('/api')]
 class ApiController extends AbstractController
@@ -23,8 +24,20 @@ class ApiController extends AbstractController
         Request $request,
         UserRepository $userRepository,
         UserPasswordHasherInterface $passwordHasher,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        #[\Symfony\Component\DependencyInjection\Attribute\Autowire(service: 'limiter.api_login')]
+        RateLimiterFactory $apiLoginLimiter
     ): JsonResponse {
+
+        // Limite les tentatives de connexion par adresse IP
+        $limiter = $apiLoginLimiter->create($request->getClientIp());
+        if (false === $limiter->consume(1)->isAccepted()) {
+            return new JsonResponse(
+                ['error' => 'Trop de tentatives. Veuillez réessayer dans quelques minutes.'],
+                Response::HTTP_TOO_MANY_REQUESTS
+            );
+        }
+
         $data = json_decode($request->getContent(), true);
         $email = $data['email'] ?? null;
         $password = $data['password'] ?? null;
@@ -39,13 +52,17 @@ class ApiController extends AbstractController
             return new JsonResponse(['error' => 'Identifiants invalides.'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Génération d'un token sécurisé
-        $token = bin2hex(random_bytes(32));
-        $user->setApiToken($token);
+        // Generation d'un token securise.
+        $plainToken = bin2hex(random_bytes(32));
+        $hashedToken = hash('sha256', $plainToken);
+
+        $user->setApiToken($hashedToken);
+        $user->setApiTokenExpiresAt(new \DateTimeImmutable('+24 hours'));
         $em->flush();
 
         return new JsonResponse([
-            'token' => $token,
+            'token' => $plainToken,
+            'expires_at' => $user->getApiTokenExpiresAt()->format(\DateTimeInterface::ATOM),
             'user' => $this->serializeUser($user),
         ]);
     }
@@ -53,10 +70,7 @@ class ApiController extends AbstractController
     #[Route('/me', name: 'api_me', methods: ['GET'])]
     public function me(): JsonResponse
     {
-        $user = null;
-        if ($this->container && $this->container->has('security.token_storage')) {
-            $user = $this->getUser();
-        }
+        $user = $this->getUser();
 
         if (!$user instanceof User) {
             return new JsonResponse(
