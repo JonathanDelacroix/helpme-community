@@ -1,5 +1,6 @@
 {% extends 'base.html.twig' %}
 
+{% block meta_description %}{{ project.description|striptags|slice(0, 155) }}{% endblock %}
 {% block title %}
 	{{ project.title }}
 	- Help Me Community

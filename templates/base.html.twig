@@ -2,8 +2,19 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="google-site-verification" content="MjdZ-TwPhfU3pcsfyle4Q4dOKfK9V-axCdq_FawpxaY" />
     <title>{% block title %}Help Me Community{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{% block meta_description %}Association humanitaire dédiée à l'amélioration des conditions de vie des communautés vulnérables : construction de puits, aide alimentaire, distribution de vêtements.{% endblock %}">
+    <link rel="canonical" href="{{ app.request.uri }}">
+
+    <!-- Open Graph / partage sur les reseaux sociaux -->
+    <meta property="og:title" content="{% block og_title %}Help Me Community{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Ensemble, nous construisons des puits, distribuons de la nourriture et offrons des vêtements aux communautés dans le besoin.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ app.request.uri }}">
+    <meta property="og:image" content="{{ absolute_url(asset('img/fondhelpme.png')) }}">
+    <meta property="og:locale" content="fr_FR">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
