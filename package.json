@@ -7,6 +7,7 @@
         "@symfony/webpack-encore": "^5.3.1",
         "core-js": "^3.23.0",
         "regenerator-runtime": "^0.13.9",
+        "vitest": "^5.0.1",
         "webpack": "^5.103.0",
         "webpack-notifier": "^1.15.0"
     },
@@ -16,10 +17,29 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production --progress"
+        "build": "encore production --progress",
+        "test": "vitest run"
     },
     "dependencies": {
         "@popperjs/core": "^2.11.8",
         "bootstrap": "^5.3.8"
-    }
+    },
+    "name": "help-me-community",
+    "version": "1.0.0",
+    "description": "��#\u0000 \u0000h\u0000e\u0000l\u0000p\u0000m\u0000e\u0000-\u0000c\u0000o\u0000m\u0000m\u0000u\u0000n\u0000i\u0000t\u0000y\u0000\r\u0000 \u0000",
+    "main": "webpack.config.js",
+    "directories": {
+        "test": "tests"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JonathanDelacroix/helpme-community.git"
+    },
+    "keywords": [],
+    "author": "",
+    "type": "commonjs",
+    "bugs": {
+        "url": "https://github.com/JonathanDelacroix/helpme-community/issues"
+    },
+    "homepage": "https://github.com/JonathanDelacroix/helpme-community#readme"
 }
