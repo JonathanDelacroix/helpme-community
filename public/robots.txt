@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /donor
+Disallow: /login
+Disallow: /inscription
+Disallow: /verify
+Disallow: /reset-password
+
+Sitemap: https://helpme-community.fr/sitemap.xml
